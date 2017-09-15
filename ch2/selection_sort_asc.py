@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 def selection_sort_asc(arr):
-    for i in range(0, len(arr)):
+    for i in range(0, len(arr) - 1):
         min = arr[i]
         index = i
         for j in range(i+1, len(arr)):

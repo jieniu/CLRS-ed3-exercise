@@ -55,5 +55,6 @@ if __name__ == "__main__":
 
     a = [2,3,8,6,1]
     inv = merge_sort(a, 0, len(a))
+    print a
     print inv
 

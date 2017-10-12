@@ -1,9 +1,17 @@
 #!/usr/bin/python
+#coding:utf-8
+
+import random, datetime
 
 # CLRS page 71
 def findMaximumSubArray(arr, start, end):
     if start == end - 1:
         return (start, end, arr[start])
+
+    # change the base
+    #if (end - start) <= 31:
+    #    (s, e, sum) = findMaximumSubArrayBruteForceV(arr[start:end])
+    #    return (s+start, e+start, sum)
 
     mid = (start + end) / 2
     (left_begin, left_end, left_sum) = findMaximumSubArray(arr, start, mid)
@@ -42,6 +50,49 @@ def findMaxCrossingSubarray(array, mid):
 
     return (begin, end, left_max + right_max)
 
+# 求最大子数组的暴力版本
+def findMaximumSubArrayBruteForceV(arr):
+    max_sub = arr[0]
+    begin = 0
+    end = 0
+
+    for i in range(0, len(arr)):
+        sub_sum = 0
+        for j in range(i, len(arr)):
+            sub_sum += arr[j]
+            if sub_sum > max_sub:
+                max_sub = sub_sum
+                begin = i
+                end = j
+    return (begin, end, max_sub)
+
+
+def computeCrossN():
+    for i in range(1, 100000):
+        random.seed(i)
+        arr = []
+        for j in range(0, i):
+            num = random.randint(-1000, 1000)
+            arr.append(num)
+
+        start = datetime.datetime.now()
+        findMaximumSubArray(arr, 0, len(arr))
+        end = datetime.datetime.now()
+        delta1 = (end - start).microseconds * 1.0 / 1000
+
+        start = datetime.datetime.now()
+        findMaximumSubArrayBruteForceV(arr)
+        end = datetime.datetime.now()
+        delta2 = (end - start).microseconds * 1.0 / 1000
+
+        if delta1 < delta2:
+            print "crossover n = %d" % i
+            print "O(nlogN) %f, O(N^2) %f" % (delta1, delta2)
+            break
+        else:
+            print "O(nlogN) %f, O(N^2) %f" % (delta1, delta2)
+
+
 
 if __name__ == "__main__":
     arr = [1,2,3,4,-7,6]
@@ -49,4 +100,12 @@ if __name__ == "__main__":
 
     # example in page 70
     arr = [13,-3,-25,20,-3,-16,-23,18,20,-7,12,-5,-22,15,-4,7]
-    print findMaxSubArray(arr, 0, len(arr))
+    print findMaximumSubArray(arr, 0, len(arr))
+    print findMaximumSubArrayBruteForceV(arr)
+
+    arr = [-1,-2,-3,-4,-5]
+    print findMaximumSubArrayBruteForceV(arr)
+
+    arr = [-2,-3,-4,-5, -1]
+    print findMaximumSubArrayBruteForceV(arr)
+    computeCrossN()
